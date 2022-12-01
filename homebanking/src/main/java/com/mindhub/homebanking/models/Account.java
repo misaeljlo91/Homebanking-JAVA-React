@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -22,6 +24,9 @@ public class Account {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, orphanRemoval = true)
+    Set<Transaction> transactions = new HashSet<>();
 
     public Account() { }
 
@@ -41,6 +46,7 @@ public class Account {
     public AccountType getType() {return type;}
     public LocalDateTime getCreationDate() {return creationDate;}
     public double getBalance() {return balance;}
+    public Set<Transaction> getTransactions() {return transactions;}
 
     @JsonIgnore
     public Client getClient() {return client;}
